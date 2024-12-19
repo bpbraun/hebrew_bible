@@ -28,3 +28,18 @@ The XML data for the Hebrew Bible comes from [Tanach.us](https://tanach.us/), a 
 ## Contributing
 
 Contributions are welcome! If you’d like to collaborate, please open an issue or submit a pull request.
+
+## License
+
+This project is licensed under the [Creative Commons Attribution-NonCommercial 4.0 International (CC BY-NC 4.0)](https://creativecommons.org/licenses/by-nc/4.0/) license.
+
+### You are free to:
+- **Share** — copy and redistribute the material in any medium or format.
+- **Adapt** — remix, transform, and build upon the material.
+
+### Under the following terms:
+- **Attribution** — You must give appropriate credit, provide a link to the license, and indicate if changes were made. You may do so in any reasonable manner, but not in any way that suggests the licensor endorses you or your use.
+- **NonCommercial** — You may not use the material for commercial purposes without explicit permission from the author.
+
+The XML data from the Hebrew Bible is sourced from [Tanach.us](https://tanach.us/) and adheres to its [license](https://tanach.us/License.html). Please respect their license conditions as well when using this project.
+
