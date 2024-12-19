@@ -1,5 +1,6 @@
 library(xml2)
 library(tidyverse)
+library(janitor)
 
 # Function to parse a single book XML file
 parse_book_xml <- function(file_path) {
@@ -67,6 +68,20 @@ build_tanach_with_dh <- function(books_folder, dh_folder, canonical_order, torah
   return(tanach_with_dh)
 }
 
+add_section_label <- function(tanach_df){
+  tanach_df %>% 
+    mutate(section = case_when(
+      Book %in% torah_books ~ "Torah",
+      Book %in% prophets_books ~ "Trophets",
+      Book %in% writings_books ~ "Writings"
+      ))
+}
+
+remove_markings <- function(tanach_df) {
+  tanach_df %>% 
+    mutate(text_without_marks = str_remove_all(Text, "[\u0591-\u05C7\u05BE\u05F3\u05F4]"))
+}
+
 # Canonical order of books
 canonical_order <- c(
   "Genesis", "Exodus", "Leviticus", "Numbers", "Deuteronomy",
@@ -81,10 +96,24 @@ canonical_order <- c(
 
 # Define Torah books
 torah_books <- c("Genesis", "Exodus", "Leviticus", "Numbers", "Deuteronomy")
+prophets_books <- c("Joshua", "Judges", "Samuel_1", "Samuel_2",
+                    "Kings_1", "Kings_2", "Isaiah", "Jeremiah", "Ezekiel",
+                    "Hosea", "Joel", "Amos", "Obadiah", "Jonah", "Micah",
+                    "Nahum", "Habakkuk", "Zephaniah", "Haggai", "Zechariah", "Malachi")
+writings_books <- c("Psalms", "Proverbs", "Job", "Song_of_Songs", "Ruth",
+                    "Lamentations", "Ecclesiastes", "Esther", "Daniel",
+                    "Ezra", "Nehemiah", "Chronicles_1", "Chronicles_2")
+
 # Build the full dataset
 books_folder <- "books"
 dh_folder <- "dh_files"
 tanach_with_dh <- build_tanach_with_dh(books_folder, dh_folder, canonical_order, torah_books)
 
+tanach_df <- tanach_with_dh %>%
+  add_section_label() %>% 
+  remove_markings() %>%
+  clean_names() %>%
+  select(section, book, chapter, verse, text, text_without_marks, dh_source)
+
 # Inspect the final dataset
-write_rds(tanach_with_dh, "processed_data/tidy_tanach.rds")
+write_rds(tanach_df, "processed_data/tidy_tanach.rds")
